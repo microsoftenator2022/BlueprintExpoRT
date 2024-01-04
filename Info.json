@@ -1,0 +1,10 @@
+﻿{
+  "Id": "BlueprintExpoRT",
+  "DisplayName": "Blueprint ExpoRT",
+  "Author": "microsoftenator",
+  "Version": "1.0",
+  "ManagerVersion": "0.25.0",
+  "Requirements": [],
+  "AssemblyName": "BlueprintExpoRT.dll",
+  "EntryMethod": "BlueprintExpoRT.Main.Load"
+}
