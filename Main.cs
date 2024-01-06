@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +31,11 @@ namespace BlueprintExpoRT
 
         internal Harmony Harmony;
 
+        public static string ZipFilePath =>
+            Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                "blueprints.zip");
+
         private Main(UnityModManager.ModEntry modEntry)
         {
             ModEntry = modEntry;
@@ -51,27 +58,19 @@ namespace BlueprintExpoRT
 
         void OnGUI(UnityModManager.ModEntry modEntry)
         {
-            var blueprintsCount = BlueprintsCache_Init.Total;
+            var blueprintsCount = Extractor.Total;
 
-            if (BlueprintsCache_Init.Count <= 0)
-            {
-                GUILayout.Label("Waiting");
-                return;
-            }
+            GUILayout.BeginVertical();
 
-            if (BlueprintsCache_Init.Count < blueprintsCount)
+            GUILayout.Label(Extractor.Status);
+
+            if (Extractor.Status != "Waiting")
             {
-                GUILayout.Label($"{BlueprintsCache_Init.Count}/{blueprintsCount}");
-                return;
+                GUILayout.Label($"Dumped: {Extractor.Dumped}/{blueprintsCount}");
+                GUILayout.Label($"Compressed: {Extractor.Compressed}/{Extractor.CompressQueued}");
             }
             
-            if (!BlueprintsCache_Init.Done)
-            {
-                GUILayout.Label("Writing zip");
-                return;
-            }
-            
-            GUILayout.Label("Done");
+            GUILayout.EndVertical();
         }
     }
 }

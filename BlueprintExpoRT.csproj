@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MicroUtils\MicroUtils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="UnityModManager" HintPath="$(RogueTraderData)\UnityModManager\UnityModManager.dll" Private="false" />    
   </ItemGroup>
   
@@ -38,6 +42,7 @@
     <Reference Include="Newtonsoft.Json" HintPath="$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Newtonsoft.Json.dll" Private="false" />
     <Reference Include="UniRx" HintPath="$(RogueTraderInstallDir)\WH40KRT_Data\Managed\UniRx.dll" Private="false" />
     <Reference Include="0Harmony" HintPath="$(RogueTraderInstallDir)\WH40KRT_Data\Managed\0Harmony.dll" Private="false" />
+    <Reference Include="Utility.UnityExtensions" HintPath="$(RogueTraderInstallDir)\WH40KRT_Data\Managed\Utility.UnityExtensions.dll" Private="false" />
   </ItemGroup>
   
   <ItemGroup>
