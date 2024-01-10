@@ -26,6 +26,8 @@ using Newtonsoft.Json;
 
 using UnityEngine;
 
+using UnityModManagerNet;
+
 namespace BlueprintExpoRT
 {
     class LocalizedStringConverter : JsonConverter
@@ -250,17 +252,38 @@ namespace BlueprintExpoRT
             return Done;
         }
 
+        public static readonly List<string> ModIdWhitelist =
+        [
+            "0ToyBox0",
+            "AllowModdedAchievements",
+            "SteamWorkshopManager",
+            "UnityExplorerLoader"
+        ];
+
+        public static bool OtherModsActive =>
+            UnityModManager.ModEntries
+                .Where(me => me.Active)
+                .Select(me => me.Info.Id)
+                .Any(id => id != Main.Instance.ModEntry.Info.Id && !ModIdWhitelist.Contains(id)) ||
+            OwlcatModificationsManager.Instance.IsAnyModActive;
+
         public static string Status = "Waiting";
 
         public static IEnumerator Coroutine()
         {
             var targetPath = Path.Combine(Path.GetDirectoryName(Application.dataPath), "blueprints.zip");
 
-
             if (File.Exists(targetPath))
             {
                 Main.Instance.Logger.Log($"{targetPath} already exists. Skipping.");
                 Status = "Done";
+                yield break;
+            }
+
+            if (OtherModsActive)
+            {
+                Main.Instance.Logger.Warning($"Mods are active. Skipping");
+                Status = "Disabled - Mods Active";
                 yield break;
             }
 
@@ -289,6 +312,7 @@ namespace BlueprintExpoRT
 
             if (task.Result)
             {
+                Status = "Copying zip";
                 File.Copy(ZipFilePath, targetPath);
                 Status = "Done";
             }
